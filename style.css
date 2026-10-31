@@ -16,7 +16,8 @@
   --cols: 4;
   --m: 1.5rem;
   --l: clamp(2.25rem, 0.75rem + 2.5vw, 3rem);
-  --xl: clamp(3rem, 18vw, 16rem);
+  --xl: clamp(3rem, 18vw, 15rem);
+  --max: calc(var(--u) * 48); /* content width cap */
 }
 
 #program, [href="#program"] { --a: var(--c1) }
@@ -33,11 +34,13 @@ body { font: 1rem/1.5 H, Helvetica, Arial, sans-serif }
 h1, .plate b { font-size: var(--xl) }
 h2 { font-size: var(--l) }
 h1, h2, .plate b { line-height: 1; letter-spacing: -0.02em }
-h3, dd, .m, .plate, .cta { font-size: var(--m); line-height: 1.5 }
-h2, h3 { text-wrap: balance }
+h3, dd, .m, .plate, .cta, .tag { font-size: var(--m); line-height: 1.5 }
+.tag { line-height: 1.25 }
+h2, h3, .tag { text-wrap: balance }
 p { max-width: 60ch; text-wrap: pretty }
 dd, .cta, .tariffs .m, .rows li > :first-child { font-weight: bold }
 h3 { font-weight: normal }
+mark { padding-inline: 0.15em; background: var(--fg); color: var(--bg); white-space: nowrap }
 
 a { color: inherit; text-underline-offset: 0.2em; text-decoration-thickness: 1px }
 a:hover { text-decoration-thickness: 0.15em }
@@ -47,11 +50,11 @@ a:hover { text-decoration-thickness: 0.15em }
   display: grid;
   grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
   gap: calc(var(--u) * 2) var(--u);
-  padding: calc(var(--u) * 4) var(--u);
+  padding: calc(var(--u) * 3) max(var(--u), (100% - var(--max)) / 2);
 }
-.sub, .rows li { display: grid; grid-template-columns: subgrid }
+.sub, .rows > * { display: grid; grid-template-columns: subgrid; align-items: baseline }
 .sub { row-gap: var(--u) }
-:where(.grid, .sub, .rows li) > * { grid-column: 1 / -1; min-width: 0 }
+:where(.grid, .sub, .rows > *) > * { grid-column: 1 / -1; min-width: 0 }
 
 .hero {
   min-height: 100vh;
@@ -60,6 +63,10 @@ a:hover { text-decoration-thickness: 0.15em }
   padding-top: var(--u);
 }
 h1 { align-self: end }
+@media (prefers-reduced-motion: no-preference) {
+  h1 span { animation: type 0.6s calc(var(--i) * 0.16s) both }
+}
+@keyframes type { from { opacity: 0 } }
 nav a { grid-column: span 2 }
 
 nav a::before, h2::before {
@@ -71,7 +78,7 @@ nav a::before, h2::before {
   background: var(--a);
 }
 
-.rows li, .facts div, .tariffs li > * { border-top: 1px solid; padding-block: calc(var(--u) / 2) }
+.rows > *, .facts div, .tariffs li > * { border-top: 1px solid; padding-block: calc(var(--u) / 2) }
 
 .plate, .cta { display: grid; align-content: end }
 .plate {
@@ -96,12 +103,13 @@ footer { border-top: 1px solid }
   :root { --cols: 12 }
   :where(.grid) > * { grid-column: 4 / -1 }
   .lead { font-size: var(--m) }
+  .tag { font-size: var(--l); grid-column: 1 / 10 }
   h1, nav { grid-column: 1 / -1 }
   h2, .cta, footer > :first-child { grid-column: 1 / 4 }
   .hero > .cta { grid-row: -2 }
   #price .cta { grid-column: 10 / -1; align-self: end }
   .plate { grid-column: 1 / span var(--span) }
-  nav a, .facts div, .tariffs li, .rows li > :first-child { grid-column: span 3 }
-  .rows li > :nth-child(2) { grid-column: span 4 }
-  .rows li > :nth-child(3) { grid-column: span 2 }
+  nav a, .facts div, .tariffs li, .rows > * > :first-child { grid-column: span 3 }
+  .rows > * > :nth-child(2) { grid-column: span 4 }
+  .rows > * > :nth-child(3) { grid-column: span 2 }
 }
