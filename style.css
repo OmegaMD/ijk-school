@@ -1,0 +1,107 @@
+@font-face { font-family: H; src: url(helvetica-255/Helvetica.ttf); font-display: swap }
+@font-face { font-family: H; src: url(helvetica-255/Helvetica-Bold.ttf); font-weight: bold; font-display: swap }
+
+:root {
+  --light: #efefef;
+  --dark: #101010;
+  --c1: #0aaccc;
+  --c2: #cc0a4b;
+  --c3: #ccac0a;
+  --bg: var(--light);
+  --fg: var(--dark);
+  --a: var(--fg);   /* screen accent */
+  --on: var(--fg);  /* text on accent */
+  --span: 6;        /* plate width, columns */
+  --u: 1.5rem;      /* module = body line-height */
+  --cols: 4;
+  --m: 1.5rem;
+  --l: clamp(2.25rem, 0.75rem + 2.5vw, 3rem);
+  --xl: clamp(3rem, 18vw, 16rem);
+}
+
+#program, [href="#program"] { --a: var(--c1) }
+#method, [href="#method"] { --a: var(--c2); --on: var(--light); --span: 5 }
+#price, [href="#price"] { --a: var(--c3); --span: 7 }
+.inv { --bg: var(--dark); --fg: var(--light); --a: var(--fg) }
+
+* { margin: 0; padding: 0; box-sizing: border-box }
+ol, ul { list-style: none }
+
+body, .inv { background: var(--bg); color: var(--fg) }
+body { font: 1rem/1.5 H, Helvetica, Arial, sans-serif }
+
+h1, .plate b { font-size: var(--xl) }
+h2 { font-size: var(--l) }
+h1, h2, .plate b { line-height: 1; letter-spacing: -0.02em }
+h3, dd, .m, .plate, .cta { font-size: var(--m); line-height: 1.5 }
+h2, h3 { text-wrap: balance }
+p { max-width: 60ch; text-wrap: pretty }
+dd, .cta, .tariffs .m, .rows li > :first-child { font-weight: bold }
+h3 { font-weight: normal }
+
+a { color: inherit; text-underline-offset: 0.2em; text-decoration-thickness: 1px }
+a:hover { text-decoration-thickness: 0.15em }
+:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  gap: calc(var(--u) * 2) var(--u);
+  padding: calc(var(--u) * 4) var(--u);
+}
+.sub, .rows li { display: grid; grid-template-columns: subgrid }
+.sub { row-gap: var(--u) }
+:where(.grid, .sub, .rows li) > * { grid-column: 1 / -1; min-width: 0 }
+
+.hero {
+  min-height: 100vh;
+  min-height: 100svh;
+  grid-template-rows: auto 1fr auto auto;
+  padding-top: var(--u);
+}
+h1 { align-self: end }
+nav a { grid-column: span 2 }
+
+nav a::before, h2::before {
+  content: "";
+  display: block;
+  width: var(--u);
+  height: var(--u);
+  margin-bottom: calc(var(--u) / 2);
+  background: var(--a);
+}
+
+.rows li, .facts div, .tariffs li > * { border-top: 1px solid; padding-block: calc(var(--u) / 2) }
+
+.plate, .cta { display: grid; align-content: end }
+.plate {
+  min-height: calc(var(--u) * 12);
+  max-width: none;
+  padding: var(--u);
+  background: var(--a);
+  color: var(--on);
+}
+.cta {
+  min-height: calc(var(--u) * 4);
+  padding: calc(var(--u) / 2);
+  background: var(--fg);
+  color: var(--bg);
+  text-decoration: none;
+}
+.cta:hover { text-decoration: underline }
+
+footer { border-top: 1px solid }
+
+@media (min-width: 60em) {
+  :root { --cols: 12 }
+  :where(.grid) > * { grid-column: 4 / -1 }
+  .lead { font-size: var(--m) }
+  h1, nav { grid-column: 1 / -1 }
+  h2, .cta, footer > :first-child { grid-column: 1 / 4 }
+  .hero > .cta { grid-row: -2 }
+  #price .cta { grid-column: 10 / -1; align-self: end }
+  .plate { grid-column: 1 / span var(--span) }
+  nav a, .facts div, .tariffs li, .rows li > :first-child { grid-column: span 3 }
+  .rows li > :nth-child(2) { grid-column: span 4 }
+  .rows li > :nth-child(3) { grid-column: span 2 }
+}
